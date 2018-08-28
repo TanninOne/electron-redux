@@ -5,6 +5,8 @@ const forwardToRenderer = () => next => (action) => {
   if (!validateAction(action)) return next(action);
   if (action.meta && action.meta.scope === 'local') return next(action);
 
+  const origin = action.meta ? action.meta.origin : undefined;
+
   // change scope to avoid endless-loop
   const rendererAction = {
     ...action,
@@ -17,7 +19,9 @@ const forwardToRenderer = () => next => (action) => {
   const allWebContents = webContents.getAllWebContents();
 
   allWebContents.forEach((contents) => {
-    contents.send('redux-action', rendererAction);
+    if (origin !== undefined && contents.id !== origin) {
+      contents.send('redux-action', rendererAction);
+    }
   });
 
   return next(action);
