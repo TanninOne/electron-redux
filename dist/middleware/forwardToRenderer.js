@@ -46,7 +46,7 @@ const forwardToRenderer = function forwardToRenderer() {
       const allWebContents = _electron.webContents.getAllWebContents();
 
       allWebContents.forEach((contents) => {
-        if (origin !== undefined && contents.id !== origin) {
+        if (origin === undefined || contents.id !== origin) {
           contents.send('redux-action', rendererAction);
         }
       });
