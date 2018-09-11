@@ -13,6 +13,8 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
+let webContents;
+
 const forwardToMain = function forwardToMain(store) {
   return function (next) {
     return function (action) {
@@ -24,14 +26,16 @@ const forwardToMain = function forwardToMain(store) {
         action.type.substr(0, 10) !== 'redux-form' &&
         (!action.meta || !action.meta.scope || action.meta.scope !== 'local')
       ) {
-        const contents = _electron.remote.getCurrentWebContents();
+        if (webContents === undefined) {
+          webContents = _electron.remote.getCurrentWebContents();
+        }
 
-        if (contents) {
+        if (webContents) {
           if (action.meta === undefined) {
             action.meta = {};
           }
 
-          action.meta.origin = contents.id;
+          action.meta.origin = webContents.id;
         }
 
         _electron.ipcRenderer.send('redux-action', action);
