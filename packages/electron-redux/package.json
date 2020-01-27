@@ -1,6 +1,6 @@
 {
   "name": "electron-redux",
-  "version": "1.4.0-sync",
+  "version": "1.4.2-sync",
   "description": "Use redux in the main and browser process in electron",
   "main": "dist/index.js",
   "files": [

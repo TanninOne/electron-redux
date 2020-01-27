@@ -11,6 +11,6 @@ export default function replayActionMain(store) {
   global.getReduxState = () => JSON.stringify(store.getState());
 
   ipcMain.on('redux-action', (event, payload) => {
-    store.dispatch(payload);
+    store.dispatch(JSON.parse(payload));
   });
 }

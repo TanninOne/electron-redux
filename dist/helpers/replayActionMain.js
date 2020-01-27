@@ -20,6 +20,6 @@ function replayActionMain(store) {
   };
 
   _electron.ipcMain.on('redux-action', function(event, payload) {
-    store.dispatch(payload);
+    store.dispatch(JSON.parse(payload));
   });
 }

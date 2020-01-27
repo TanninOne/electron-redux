@@ -28,7 +28,7 @@ export const forwardToMainWithParams = (params = {}) => store => next => action 
       action.meta.origin = webContents.id;
     }
 
-    ipcRenderer.send('redux-action', action);
+    ipcRenderer.send('redux-action', JSON.stringify(action));
   }
 };
 

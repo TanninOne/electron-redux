@@ -9,6 +9,6 @@ var _electron = require('electron');
 
 function replayActionRenderer(store) {
   _electron.ipcRenderer.on('redux-action', function(event, payload) {
-    store.dispatch(payload);
+    store.dispatch(JSON.parse(payload));
   });
 }

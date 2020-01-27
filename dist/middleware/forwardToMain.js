@@ -50,7 +50,7 @@ var forwardToMainWithParams = function forwardToMainWithParams() {
             action.meta.origin = webContents.id;
           }
 
-          _electron.ipcRenderer.send('redux-action', action);
+          _electron.ipcRenderer.send('redux-action', JSON.stringify(action));
         }
       };
     };

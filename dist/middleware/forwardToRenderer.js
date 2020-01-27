@@ -47,7 +47,7 @@ var forwardToRenderer = function forwardToRenderer() {
 
       allWebContents.forEach(function(contents) {
         if (origin === undefined || contents.id !== origin) {
-          contents.send('redux-action', rendererAction);
+          contents.send('redux-action', JSON.stringify(rendererAction));
         }
       });
       return next(action);
