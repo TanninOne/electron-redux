@@ -1,4 +1,4 @@
-
+'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true,
@@ -6,5 +6,5 @@ Object.defineProperty(exports, '__esModule', {
 exports.ALIASED = void 0;
 
 /* eslint-disable import/prefer-default-export */
-const ALIASED = 'ALIASED';
+var ALIASED = 'ALIASED';
 exports.ALIASED = ALIASED;

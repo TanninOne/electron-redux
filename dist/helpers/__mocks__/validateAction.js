@@ -1,10 +1,12 @@
-
+'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true,
 });
 exports.default = void 0;
 
-const _default = jest.fn(() => true);
+var _default = jest.fn(function() {
+  return true;
+});
 
 exports.default = _default;

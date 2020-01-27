@@ -1,11 +1,11 @@
-
+'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true,
 });
 exports.default = replayActionMain;
 
-const _electron = require('electron');
+var _electron = require('electron');
 
 function replayActionMain(store) {
   /**
@@ -15,11 +15,11 @@ function replayActionMain(store) {
    *
    * Refer to https://github.com/electron/electron/blob/master/docs/api/remote.md#remote-objects
    */
-  global.getReduxState = function () {
+  global.getReduxState = function() {
     return JSON.stringify(store.getState());
   };
 
-  _electron.ipcMain.on('redux-action', (event, payload) => {
+  _electron.ipcMain.on('redux-action', function(event, payload) {
     store.dispatch(payload);
   });
 }

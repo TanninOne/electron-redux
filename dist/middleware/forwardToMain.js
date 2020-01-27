@@ -1,50 +1,65 @@
-
+'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true,
 });
-exports.default = void 0;
+exports.default = exports.forwardToMainWithParams = void 0;
 
-const _electron = require('electron');
+var _electron = require('electron');
 
-const _validateAction = _interopRequireDefault(require('../helpers/validateAction'));
+var _validateAction = _interopRequireDefault(require('../helpers/validateAction'));
 
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
-let webContents;
+var webContents; // eslint-disable-next-line consistent-return, no-unused-vars
 
-const forwardToMain = function forwardToMain(store) {
-  return function (next) {
-    return function (action) {
-      // eslint-disable-line no-unused-vars
-      if (!(0, _validateAction.default)(action)) return next(action);
+var forwardToMainWithParams = function forwardToMainWithParams() {
+  var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return function(store) {
+    return function(next) {
+      return function(action) {
+        var _params$blacklist = params.blacklist,
+          blacklist = _params$blacklist === void 0 ? [] : _params$blacklist;
+        if (!(0, _validateAction.default)(action)) return next(action);
+        if (action.meta && action.meta.scope === 'local') return next(action);
 
-      if (
-        action.type.substr(0, 2) !== '@@' &&
-        action.type.substr(0, 10) !== 'redux-form' &&
-        (!action.meta || !action.meta.scope || action.meta.scope !== 'local')
-      ) {
-        if (webContents === undefined) {
-          webContents = _electron.remote.getCurrentWebContents();
+        if (
+          blacklist.some(function(rule) {
+            return rule.test(action.type);
+          })
+        ) {
+          return next(action);
         }
 
-        if (webContents) {
-          if (action.meta === undefined) {
-            action.meta = {};
+        if (
+          action.type.substr(0, 2) !== '@@' &&
+          action.type.substr(0, 10) !== 'redux-form' &&
+          (!action.meta || !action.meta.scope || action.meta.scope !== 'local')
+        ) {
+          if (webContents === undefined) {
+            webContents = _electron.remote.getCurrentWebContents();
           }
 
-          action.meta.origin = webContents.id;
+          if (webContents) {
+            if (action.meta === undefined) {
+              action.meta = {};
+            }
+
+            action.meta.origin = webContents.id;
+          }
+
+          _electron.ipcRenderer.send('redux-action', action);
         }
-
-        _electron.ipcRenderer.send('redux-action', action);
-      } // eslint-disable-next-line consistent-return
-
-      return next(action);
+      };
     };
   };
 };
 
-const _default = forwardToMain;
+exports.forwardToMainWithParams = forwardToMainWithParams;
+var forwardToMain = forwardToMainWithParams({
+  blacklist: [/^@@/, /^redux-form/],
+});
+var _default = forwardToMain;
 exports.default = _default;

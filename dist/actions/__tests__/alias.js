@@ -1,10 +1,10 @@
+'use strict';
 
-
-const _alias = require('../alias');
+var _alias = require('../alias');
 
 jest.unmock('../alias');
-describe('alias', () => {
-  it('should return the ALIASED action type', () => {
+describe('alias', function() {
+  it('should return the ALIASED action type', function() {
     expect(_alias.ALIASED).toBe('ALIASED');
   });
 });

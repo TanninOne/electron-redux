@@ -3,9 +3,15 @@ import validateAction from '../helpers/validateAction';
 
 let webContents;
 
-const forwardToMain = store => next => (action) => {
-  // eslint-disable-line no-unused-vars
+// eslint-disable-next-line consistent-return, no-unused-vars
+export const forwardToMainWithParams = (params = {}) => store => next => action => {
+  const { blacklist = [] } = params;
   if (!validateAction(action)) return next(action);
+  if (action.meta && action.meta.scope === 'local') return next(action);
+
+  if (blacklist.some(rule => rule.test(action.type))) {
+    return next(action);
+  }
 
   if (
     action.type.substr(0, 2) !== '@@' &&
@@ -24,9 +30,10 @@ const forwardToMain = store => next => (action) => {
 
     ipcRenderer.send('redux-action', action);
   }
-
-  // eslint-disable-next-line consistent-return
-  return next(action);
 };
+
+const forwardToMain = forwardToMainWithParams({
+  blacklist: [/^@@/, /^redux-form/],
+});
 
 export default forwardToMain;

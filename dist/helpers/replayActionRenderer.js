@@ -1,14 +1,14 @@
-
+'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true,
 });
 exports.default = replayActionRenderer;
 
-const _electron = require('electron');
+var _electron = require('electron');
 
 function replayActionRenderer(store) {
-  _electron.ipcRenderer.on('redux-action', (event, payload) => {
+  _electron.ipcRenderer.on('redux-action', function(event, payload) {
     store.dispatch(payload);
   });
 }

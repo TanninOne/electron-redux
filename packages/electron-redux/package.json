@@ -1,17 +1,25 @@
 {
   "name": "electron-redux",
-  "version": "1.3.2",
+  "version": "1.4.0-sync",
   "description": "Use redux in the main and browser process in electron",
   "main": "dist/index.js",
-  "files": ["dist/**"],
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
     "test": "rimraf coverage && jest --coverage",
     "lint": "eslint 'src/**/*'",
     "build": "rimraf ../../dist && babel src --out-dir ../../dist",
-    "prepublish": "yarn build",
-    "prepush": "yarn test && yarn build"
+    "prepush": "yarn test && yarn build",
+    "snyk-protect": "snyk protect",
+    "prepublish": "yarn snyk-protect"
   },
-  "keywords": ["electron", "redux", "react", "desktop"],
+  "keywords": [
+    "electron",
+    "redux",
+    "react",
+    "desktop"
+  ],
   "author": "Burkhard Reffeling <burkhard.reffeling@gmail.com> (http://www.burgiblog.com)",
   "repository": {
     "type": "git",
@@ -23,10 +31,10 @@
   "dependencies": {
     "debug": "^3.0.0",
     "flux-standard-action": "^2.0.0",
-    "redux": "^3.4.0"
+    "redux": "^4.0.1"
   },
   "peerDependencies": {
-    "redux": "^3.4.0"
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.34",
@@ -34,10 +42,12 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.34",
     "@babel/preset-env": "^7.0.0-beta.34",
     "babel-core": "^7.0.0-0",
-    "babel-eslint": "^8.0.0",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "^21.2.0",
     "greenkeeper-lockfile": "^1.12.0",
     "jest": "^21.2.1",
-    "rimraf": "^2.6.2"
-  }
+    "rimraf": "^2.6.2",
+    "snyk": "^1.189.0"
+  },
+  "snyk": true
 }
