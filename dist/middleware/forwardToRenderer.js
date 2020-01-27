@@ -30,6 +30,13 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
+function skipTarget(contents) {
+  return (
+    contents.history[0].startsWith('chrome-extension://') ||
+    contents.history[0].startsWith('devtools://')
+  );
+}
+
 var forwardToRenderer = function forwardToRenderer() {
   return function(next) {
     return function(action) {
@@ -37,17 +44,19 @@ var forwardToRenderer = function forwardToRenderer() {
       if (action.meta && action.meta.scope === 'local') return next(action);
       var origin = action.meta ? action.meta.origin : undefined; // change scope to avoid endless-loop
 
-      var rendererAction = _extends({}, action, {
-        meta: _extends({}, action.meta, {
-          scope: 'local',
+      var rendererAction = JSON.stringify(
+        _extends({}, action, {
+          meta: _extends({}, action.meta, {
+            scope: 'local',
+          }),
         }),
-      });
+      );
 
       var allWebContents = _electron.webContents.getAllWebContents();
 
       allWebContents.forEach(function(contents) {
-        if (origin === undefined || contents.id !== origin) {
-          contents.send('redux-action', JSON.stringify(rendererAction));
+        if ((origin === undefined || contents.id !== origin) && !skipTarget(contents)) {
+          contents.send('redux-action', rendererAction);
         }
       });
       return next(action);

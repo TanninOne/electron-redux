@@ -52,6 +52,8 @@ var forwardToMainWithParams = function forwardToMainWithParams() {
 
           _electron.ipcRenderer.send('redux-action', JSON.stringify(action));
         }
+
+        return next(action);
       };
     };
   };

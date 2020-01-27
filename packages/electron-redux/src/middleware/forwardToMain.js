@@ -30,6 +30,8 @@ export const forwardToMainWithParams = (params = {}) => store => next => action 
 
     ipcRenderer.send('redux-action', JSON.stringify(action));
   }
+
+  return next(action);
 };
 
 const forwardToMain = forwardToMainWithParams({
