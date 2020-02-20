@@ -2,6 +2,9 @@ import { webContents } from 'electron';
 import validateAction from '../helpers/validateAction';
 
 function skipTarget(contents) {
+  if (contents.history.length === 0 || contents.history[0] === undefined) {
+    return false;
+  }
   return (
     contents.history[0].startsWith('chrome-extension://') ||
     contents.history[0].startsWith('devtools://')
