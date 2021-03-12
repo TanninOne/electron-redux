@@ -54,11 +54,14 @@ var forwardToRenderer = function forwardToRenderer() {
 
       var allWebContents = _electron.webContents.getAllWebContents();
 
-      allWebContents.forEach(function(contents) {
-        if ((origin === undefined || contents.id !== origin) && !skipTarget(contents)) {
-          contents.send('redux-action', rendererAction);
-        }
-      });
+      if (allWebContents !== undefined) {
+        allWebContents.forEach(function(contents) {
+          if ((origin === undefined || contents.id !== origin) && !skipTarget(contents)) {
+            contents.send('redux-action', rendererAction);
+          }
+        });
+      }
+
       return next(action);
     };
   };

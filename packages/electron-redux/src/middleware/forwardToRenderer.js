@@ -2,12 +2,9 @@ import { webContents } from 'electron';
 import validateAction from '../helpers/validateAction';
 
 function skipTarget(contents) {
-  if (contents.history.length === 0 || contents.history[0] === undefined) {
-    return false;
-  }
   return (
-    contents.history[0].startsWith('chrome-extension://') ||
-    contents.history[0].startsWith('devtools://')
+    contents.getURL().startsWith('chrome-extension://') ||
+    contents.getURL().startsWith('devtools://')
   );
 }
 
@@ -28,11 +25,13 @@ const forwardToRenderer = () => next => action => {
 
   const allWebContents = webContents.getAllWebContents();
 
-  allWebContents.forEach(contents => {
-    if ((origin === undefined || contents.id !== origin) && !skipTarget(contents)) {
-      contents.send('redux-action', rendererAction);
-    }
-  });
+  if (allWebContents !== undefined) {
+    allWebContents.forEach(contents => {
+      if ((origin === undefined || contents.id !== origin) && !skipTarget(contents)) {
+        contents.send('redux-action', rendererAction);
+      }
+    });
+  }
 
   return next(action);
 };
